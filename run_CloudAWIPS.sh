@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONTANR=csdebug
+CONTANR=docker-cave
 docker rm $CONTANR
 
 ORG="jimb4"
@@ -11,9 +11,7 @@ IMAGE=${ORG}\/${PROJ}\:${TAG}
 
 # Run on port 6080
 
-#docker run -p 6080:6080 -e SIZEW=1792 -e SIZEH=1344 -e DISPLAY=:1 --name $CONTANR -v /sys/fs/cgroup:/sys/fs/cgroup -v /dev/shm:/dev/shm --mount type=tmpfs,destination=/tmp,tmpfs-size=20480000,tmpfs-mode=1777 -it $IMAGE 
-
-docker run -p 6080:6080 -e SIZEW=1792 -e SIZEH=1344 --name $CONTANR -v /home/awips-home:/home/jbayer/proj-git/fork/awips-home -v /sys/fs/cgroup:/sys/fs/cgroup -v /dev/shm:/dev/shm -it $IMAGE 
+docker run -p 6080:6080 -e SIZEW=1792 -e SIZEH=1344 -e DISPLAY=:1 --name $CONTANR -v /sys/fs/cgroup:/sys/fs/cgroup -v /dev/shm:/dev/shm --mount type=tmpfs,destination=/tmp,tmpfs-size=20480000,tmpfs-mode=1777 -it $IMAGE 
 
 # Standard screen resolutions
 # sz1 = 1792 x 1344
