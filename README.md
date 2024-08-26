@@ -19,7 +19,7 @@ A new script named "run_CloudAWIPS.sh" has been added to include the host's cgro
 
 #### Build AWIPS CAVE Docker Image
 
-    git clone https://github.com/JimB4/CloudAWIPS.git
+    git clone https://github.com/jimb4/CloudAWIPS.git
     cd CloudAWIPS
     make build
 
