@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONTANR=docker-cave
+CONTANR=csdebug
 docker rm $CONTANR
 
 ORG="jimb4"

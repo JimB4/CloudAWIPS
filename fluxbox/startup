@@ -1,2 +1,1 @@
-~/bootstrap.sh &
 /usr/bin/fluxbox -log ~/.fluxbox/log
