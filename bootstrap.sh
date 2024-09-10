@@ -26,11 +26,13 @@ trap "echo TRAPed signal" HUP INT QUIT KILL TERM
 # out the version file.
 #
 ###
+
 if [ "x${HELP}" != "x" ]; then
     if [ -e "/home/${CUSER}/CLOUDSTREAM_README.md" ]; then
         cat "/home/${CUSER}/CLOUDSTREAM_README.md"
     fi
     echo ""
+#JIM - this seems to not be needed
     if [ -e "$README_FILE" ]; then
       cat "$README_FILE"
     fi
@@ -41,7 +43,6 @@ if [ "x${HELP}" != "x" ]; then
     fi
     exit
 fi
-
 
 if [ "x${COPYRIGHT}" != "x" ]; then
   if [ -e "/home/${CUSER}/COPYRIGHT_CLOUDSTREAM.md" ]; then
@@ -61,6 +62,7 @@ fi
 # Print out the version file.
 ###
 if [ "x${VERSION}" != "x" ]; then
+    cat BANNER.md
     cat VERSION.md
     echo ""
     exit
@@ -73,11 +75,6 @@ SSLOP=""
 if [ "x${SSLONLY}" == "xTRUE" ]; then
     SSLOP="--ssl-only"
 fi
-
-###
-# Remove .x11 lock just in case there is one.
-###
-sudo rm -rf /tmp/.X1-lock
 
 ###
 # Set up vnc to use a password if USEPASS is non-empty.
@@ -111,6 +108,7 @@ cd ~
 /home/${CUSER}/noVNC/utils/launch.sh ${SSLOP} --vnc 127.0.0.1:5901 >& /dev/null &
 
 printf "\n\n=====================================================================\n"
+cat BANNER.md
 cat VERSION.md
 printf "=====================================================================\n\n"
 

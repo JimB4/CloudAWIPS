@@ -8,20 +8,28 @@
 #
  
 ORG = jimb4
-IMAGE = cloudstream
+PROJ = cloudstream
 TAG = latest
 
-all: build
+IMAGE = $(ORG)/$(PROJ):$(TAG)
 
-build:
+.PHONY: all
+all: clean build
+
+.PHONY: build
+build: clean docker_build
+
+docker_build:
 	docker build  \
-		-t $(ORG)/$(IMAGE):$(TAG) \
+		-t $(IMAGE) \
 		-f Dockerfile \
 		--no-cache \
-		--build-arg IMAGE=$(ORG)/$(IMAGE):$(TAG) \
+		--build-arg IMAGE=$(IMAGE) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		.
 
-#.PHONY: build
+.PHONY: clean
+clean:
+	docker rmi $(IMAGE) --force

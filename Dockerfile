@@ -29,9 +29,9 @@ WORKDIR /etc
 RUN rm -rf yum.repos.d
 COPY yum.repos.d yum.repos.d
 
-RUN yum -y clean all
-RUN rm -rf /var/cache/yum
-RUN yum -y makecache fast
+RUN yum -y clean all && yum -y makecache fast
+##RUN rm -rf /var/cache/yum
+#RUN yum -y makecache fast
 
 RUN groupadd fxalpha && useradd -G fxalpha awips
 RUN yum groupinstall awips2-cave -y
@@ -44,26 +44,24 @@ RUN yum install -y gtk2 mesa-libGLU mesa-libGL mesa-dri-drivers glib2 webkitgtk3
 ###
 
 USER ${CUSER}
-
-###
-# Application files and localization preferences to auto-connect to edex-cloud, and open windows at full width
-###
-
-COPY localization.prefs ${HOME}/caveData/.metadata/.plugins/org.eclipse.core.runtime/.settings/
-COPY workbench.xmi ${HOME}/caveData/.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
+WORKDIR ${HOME}
 
 ###
 # Populate the home directory for $CUSER
 ###
 
-COPY bootstrap.sh ${HOME}/
-COPY start.sh ${HOME}/
-COPY Dockerfile ${HOME}/
-COPY README.md ${HOME}/
-COPY COPYRIGHT.md ${HOME}/
+#COPY bootstrap.sh start.sh Dockerfile README.md COPYRIGHT.md BANNER.md ./
+COPY bootstrap.sh start.sh Dockerfile *.md ./
 
-ENV COPYRIGHT_FILE COPYRIGHT.md
-ENV README_FILE README.md
+RUN rm -rf caveData
+
+###
+# Application files and localization preferences to auto-connect to edex-cloud, and open windows at full width
+###
+
+#JIM
+#COPY localization.prefs caveData/.metadata/.plugins/org.eclipse.core.runtime/.settings/
+COPY workbench.xmi caveData/.metadata/.plugins/org.eclipse.e4.workbench/
 
 ###
 # Environmental variable control
@@ -73,21 +71,27 @@ USER root
 
 RUN rm -rf /etc/profile.d/awips2.csh
 RUN mv /etc/profile.d/awips2.sh ${HOME}
+
+###
+## Fluxbox desktop environment
+###
+RUN rm /usr/share/fluxbox/menu
+COPY fluxbox/* .fluxbox/
+
 RUN chown -R ${CUSER}:${CUSER} ${HOME}
 
 ###
 # Add the version number to the version file
 ###
-
 RUN echo "CloudAWIPS Version: $(rpm -qa |grep awips2-cave-wrapper | cut -d "-" -f 4,5) $(date)" >> $VERSION_FILE
 
 ###
 # Manual cleanup
 ###
-
-RUN rm -rf /awips2/cave/plugins/com.raytheon.uf.viz.archive*.jar
+#JIM
+#RUN rm -rf /awips2/cave/plugins/com.raytheon.uf.viz.archive*.jar
 RUN rm -rf /awips2/cave/plugins/com.raytheon.uf.viz.useradmin*.jar
-
+RUN mkdir -p /awips2/edex/data/share && chown -R awips:fxalpha /awips2/edex/data/share
 
 ###
 # Override default windows session geometry and color depth.
@@ -103,18 +107,6 @@ ENV CDEPTH 24
 USER ${CUSER}
 WORKDIR ${HOME}
 
-RUN rm -rf caveData
-
-## Fluxbox desktop environment
-
-USER root
-
-RUN rm /usr/share/fluxbox/menu
-COPY fluxbox/* .fluxbox/
-RUN chown -R ${CUSER}:${CUSER} ${HOME}/.fluxbox
-
-USER ${CUSER}
-
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE
@@ -129,7 +121,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0"
 
 ###
-#ENTRYPOINT bash
+CMD ./bootstrap.sh
 ###
 
 # = = = END = = =
