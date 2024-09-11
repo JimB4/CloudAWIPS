@@ -29,15 +29,13 @@ WORKDIR /etc
 RUN rm -rf yum.repos.d
 COPY yum.repos.d yum.repos.d
 
-RUN yum -y clean all && yum -y makecache fast
-##RUN rm -rf /var/cache/yum
-#RUN yum -y makecache fast
+RUN yum -y clean all && yum -y makecache fast && groupadd fxalpha && useradd -G fxalpha awips && yum groupinstall awips2-cave "Fonts" -y && \
+yum install -y gtk2 mesa-libGLU mesa-libGL mesa-dri-drivers glib2 webkitgtk3
 
-RUN groupadd fxalpha && useradd -G fxalpha awips
-RUN yum groupinstall awips2-cave -y
-RUN yum groupinstall "Fonts" -y
+#RUN yum groupinstall awips2-cave "Fonts" -y
+#RUN yum install -y gtk2 mesa-libGLU mesa-libGL mesa-dri-drivers glib2 webkitgtk3
 
-RUN yum install -y gtk2 mesa-libGLU mesa-libGL mesa-dri-drivers glib2 webkitgtk3
+RUN rm -rf /etc/profile.d/awips2.csh && mv /etc/profile.d/awips2.sh ${HOME}
 
 ###
 # The variable CUSER has the value "stream" and the user is already in the base image.
@@ -69,8 +67,8 @@ COPY workbench.xmi caveData/.metadata/.plugins/org.eclipse.e4.workbench/
 
 USER root
 
-RUN rm -rf /etc/profile.d/awips2.csh
-RUN mv /etc/profile.d/awips2.sh ${HOME}
+#JIM move to initial root user section
+#RUN rm -rf /etc/profile.d/awips2.csh && mv /etc/profile.d/awips2.sh ${HOME}
 
 ###
 ## Fluxbox desktop environment
@@ -90,15 +88,18 @@ RUN echo "CloudAWIPS Version: $(rpm -qa |grep awips2-cave-wrapper | cut -d "-" -
 ###
 #JIM
 #RUN rm -rf /awips2/cave/plugins/com.raytheon.uf.viz.archive*.jar
-RUN rm -rf /awips2/cave/plugins/com.raytheon.uf.viz.useradmin*.jar
-RUN mkdir -p /awips2/edex/data/share && chown -R awips:fxalpha /awips2/edex/data/share
+RUN rm -rf /awips2/cave/plugins/com.raytheon.uf.viz.useradmin*.jar && mkdir -p /awips2/edex/data/share && chown -R awips:fxalpha /awips2/edex/data/share
+#CHECK
+#RUN mkdir -p /awips2/edex/data/share && chown -R awips:fxalpha /awips2/edex/data/share
 
 ###
 # Override default windows session geometry and color depth.
 ###
-ENV SIZEW 1280
-ENV SIZEH 768
-ENV CDEPTH 24
+ENV SIZEW=1280,SIZEH=768,CDEPTH=24
+
+#ENV SIZEW 1280
+#ENV SIZEH 768
+#ENV CDEPTH 24
 
 ##
 # get rid of the caveData directory that came in the image
@@ -108,10 +109,12 @@ USER ${CUSER}
 WORKDIR ${HOME}
 
 # Build-time metadata as defined at http://label-schema.org
-ARG BUILD_DATE
-ARG IMAGE
-ARG VCS_REF
-ARG VCS_URL
+ARG BUILD_DATE IMAGE VCS_REF VCS_URL
+
+#ARG BUILD_DATE
+#ARG IMAGE
+#ARG VCS_REF
+#ARG VCS_URL
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name=$IMAGE \
@@ -122,6 +125,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 ###
 CMD ./bootstrap.sh
+CMD /bin/bash
 ###
 
 # = = = END = = =
