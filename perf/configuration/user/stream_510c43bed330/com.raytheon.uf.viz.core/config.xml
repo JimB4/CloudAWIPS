@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+    <textureCardPreference>4096</textureCardPreference>
+    <textureRestagingPreference>false</textureRestagingPreference>
+    <textureHeapPreference>2048</textureHeapPreference>
+    <framesPerSecondPreference>30</framesPerSecondPreference>
+    <logPerformance>false</logPerformance>
+    <tileSetPixelDensity>1.9</tileSetPixelDensity>
+</configuration>

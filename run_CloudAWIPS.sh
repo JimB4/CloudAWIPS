@@ -17,13 +17,16 @@ IMAGE=${ORG}\/${PROJ}\:${TAG}
 
 DPLAY=":1"
 
+DWIDE=1792
+DHIGH=1344
+
 # Run on port 6080
 
 docker run \
 -p 6080:6080 \
 -e DISPLAY=${DPLAY} \
--e SIZEW=1792 \
--e SIZEH=1344 \
+-e SIZEW=${DWIDE} \
+-e SIZEH=${DHIGH} \
 -v /sys/fs/cgroup:/sys/fs/cgroup \
 -v /dev/shm:/dev/shm \
 --name ${CONTANR} \
@@ -31,7 +34,7 @@ docker run \
 --cap-drop all \
 --security-opt=no-new-privileges \
 --ulimit nofile=500 \
--it $IMAGE 
+-it $IMAGE
 
 # Standard screen resolutions
 # sz1 = 1792 x 1344

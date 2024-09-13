@@ -19,6 +19,8 @@
 [encoding] {UTF-8}
       [exec] (AWIPS CAVE) {/home/stream/bootstrap.sh} </awips2/cave/cave.png>
       [exec] (xterm) {xterm}
+      [separator]
+      [exit] (Exit)
 [submenu] (Fluxbox menu)
       [config] (Configure)
 [submenu] (System Styles) {Choose a style...}

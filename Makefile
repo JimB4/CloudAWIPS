@@ -14,22 +14,23 @@ TAG = latest
 IMAGE = $(ORG)/$(PROJ):$(TAG)
 
 .PHONY: all
-all: clean build
+#all: clean build
+all: build
 
 .PHONY: build
-build: clean docker_build
+#build: clean docker_build
+build: docker_build
 
 docker_build:
 	docker build  \
 		-t $(IMAGE) \
 		-f Dockerfile \
-		--no-cache \
 		--build-arg IMAGE=$(IMAGE) \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		.
 
-.PHONY: clean
-clean:
-	docker rmi $(IMAGE) --force
+#.PHONY: clean
+#clean:
+#     docker rmi $(IMAGE) --force
