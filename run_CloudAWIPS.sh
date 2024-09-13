@@ -21,9 +21,9 @@ DPLAY=":1"
 
 docker run \
 -p 6080:6080 \
+-e DISPLAY=${DPLAY} \
 -e SIZEW=1792 \
 -e SIZEH=1344 \
--e DISPLAY=${DPLAY} \
 -v /sys/fs/cgroup:/sys/fs/cgroup \
 -v /dev/shm:/dev/shm \
 --name ${CONTANR} \
