@@ -1,0 +1,33 @@
+version: "3.9"
+  #name: cloudstream
+services:
+  cscave-prod:
+    build: .
+    image: jimb4/cloudstream:latest
+    container_name: cs-compose
+    ports:
+      - "6080:6080"
+    stdin_open: true
+    tty: true
+    cap_drop:
+      - all
+    security_opt:
+      - no-new-privileges
+    environment:
+      - SIZEW:1792
+      - SIZEH:1344
+      - DISPLAY:":1"
+      - USEPASS:"password"
+    expose:
+      - 6080
+    volumes:
+      - type: bind
+        source: /sys/fs/cgroup
+        target: /sys/fs/cgroup
+      - type: bind
+        source: /dev/shm
+        target: /dev/shm
+    tmpfs:
+      - /tmp:size=20M
+    command:
+      - /home/stream/bootstrap.sh

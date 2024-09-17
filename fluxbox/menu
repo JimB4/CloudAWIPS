@@ -15,9 +15,11 @@
 # - To prevent any other app from overwriting your menu
 #   you can change the menu name in ~/.fluxbox/init to:
 #     session.menuFile: ~/.fluxbox/my-menu
+#     [exec] (AWIPS CAVE) {/home/stream/bootstrap.sh} </awips2/cave/cave.png>
+
 [begin] (Fluxbox-1.3.7)
 [encoding] {UTF-8}
-      [exec] (AWIPS CAVE) {/home/stream/bootstrap.sh} </awips2/cave/cave.png>
+      [exec] (AWIPS CAVE) {/awips2/cave/cave.sh} </awips2/cave/cave.png>
       [exec] (xterm) {xterm}
       [separator]
       [exit] (Exit)
